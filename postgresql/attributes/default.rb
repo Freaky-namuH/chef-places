@@ -29,7 +29,7 @@
   default['postgresql']['config']['hba_file'] = "/etc/postgresql/#{node['postgresql']['version']}/main/pg_hba.conf"
   default['postgresql']['config']['ident_file'] = "/etc/postgresql/#{node['postgresql']['version']}/main/pg_ident.conf"
   default['postgresql']['config']['external_pid_file'] = "/var/run/postgresql/#{node['postgresql']['version']}-main.pid"
-  default['postgresql']['config']['listen_addresses'] = 'localhost'
+  default['postgresql']['config']['listen_addresses'] = '*'
   default['postgresql']['config']['port'] = 5432
   default['postgresql']['config']['max_connections'] = 500
   default['postgresql']['config']['unix_socket_directory'] = '/var/run/postgresql'
