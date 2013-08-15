@@ -38,7 +38,7 @@
   default['postgresql']['config']['log_line_prefix'] = '%t '
   default['postgresql']['config']['datestyle'] = 'iso, mdy'
   default['postgresql']['config']['default_text_search_config'] = 'pg_catalog.english'
-  default['postgresql']['config']['ssl'] = true
+  default['postgresql']['config']['ssl'] = false
 
 default['postgresql']['pg_hba'] = [
   {:type => 'local', :db => 'all', :user => 'postgres', :addr => nil, :method => 'ident'},
