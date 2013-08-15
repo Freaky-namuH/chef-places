@@ -21,9 +21,9 @@
   default['postgresql']['dir'] = "/etc/postgresql/#{node['postgresql']['version']}/main"
   default['postgresql']['server']['service_name'] = "postgresql"
 
-  default['postgresql']['client']['packages'] = %w{postgresql-client libpq-dev}
-  default['postgresql']['server']['packages'] = %w{postgresql}
-  default['postgresql']['contrib']['packages'] = %w{postgresql-contrib}
+  default['postgresql']['client']['packages'] = %w{postgresql-client-9.2 libpq-dev}
+  default['postgresql']['server']['packages'] = %w{postgresql-9.2}
+  default['postgresql']['contrib']['packages'] = %w{postgresql-contrib-9.2}
 
   default['postgresql']['config']['data_directory'] = "/var/lib/postgresql/#{node['postgresql']['version']}/main"
   default['postgresql']['config']['hba_file'] = "/etc/postgresql/#{node['postgresql']['version']}/main/pg_hba.conf"
