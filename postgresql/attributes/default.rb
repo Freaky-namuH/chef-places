@@ -18,7 +18,6 @@
 #
 
   default['postgresql']['version'] = "9.2"
-
   default['postgresql']['dir'] = "/etc/postgresql/#{node['postgresql']['version']}/main"
   default['postgresql']['server']['service_name'] = "postgresql"
 
@@ -32,9 +31,9 @@
   default['postgresql']['config']['external_pid_file'] = "/var/run/postgresql/#{node['postgresql']['version']}-main.pid"
   default['postgresql']['config']['listen_addresses'] = 'localhost'
   default['postgresql']['config']['port'] = 5432
-  default['postgresql']['config']['max_connections'] = 100
+  default['postgresql']['config']['max_connections'] = 500
   default['postgresql']['config']['unix_socket_directory'] = '/var/run/postgresql'
-  default['postgresql']['config']['shared_buffers'] = '24MB'
+  default['postgresql']['config']['shared_buffers'] = '768MB'
   default['postgresql']['config']['max_fsm_pages'] = 153600 if node['postgresql']['version'].to_f < 8.4
   default['postgresql']['config']['log_line_prefix'] = '%t '
   default['postgresql']['config']['datestyle'] = 'iso, mdy'
@@ -49,13 +48,7 @@ default['postgresql']['pg_hba'] = [
 ]
 
 default['postgresql']['password'] = Hash.new
+default['postgresql']['password']['postgres'] = "password"
 
-default['postgresql']['enable_pgdg_apt'] = true 
-
-case node['platform_family']
-when 'debian'
-  default['postgresql']['pgdg']['release_apt_codename'] = node['lsb']['codename']
-end
-
+default['postgresql']['enable_pitti_ppa'] = true 
 default['postgresql']['enable_pgdg_yum'] = false
-
