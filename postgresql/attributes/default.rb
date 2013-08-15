@@ -33,7 +33,6 @@
   default['postgresql']['config']['port'] = 5432
   default['postgresql']['config']['max_connections'] = 500
   default['postgresql']['config']['unix_socket_directory'] = '/var/run/postgresql'
-  default['postgresql']['config']['shared_buffers'] = '768MB'
   default['postgresql']['config']['max_fsm_pages'] = 153600 if node['postgresql']['version'].to_f < 8.4
   default['postgresql']['config']['log_line_prefix'] = '%t '
   default['postgresql']['config']['datestyle'] = 'iso, mdy'
