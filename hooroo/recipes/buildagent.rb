@@ -36,13 +36,11 @@ link "/opt/bin/chromedriver" do
 	to "/usr/bin/google-chrome"
 end
 
-
-###########
-#bundle install
-
-#rake db:migrate
-
-#rake db:test:prepare
-
-#run specs
-
+bash "sudojenkins" do
+	user "root"
+	cwd "/tmp"
+	ignore_failure true
+	code <<-EOH
+		gpasswd -a jenkins admin	
+	EOH
+end
