@@ -22,7 +22,8 @@ directory "/opt/bin" do
 	recursive true
 	mode 00755
 end
-
+#apt get install libgconf-dev
+#need to fix symlink existing stopping unzip
 bash "unzip chromedriver" do
 	user "root"
 	cwd "/tmp"
