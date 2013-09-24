@@ -4,7 +4,7 @@ require 'digest/md5'
 
 ROOT_PATH="<%= @deploy[:deploy_to] %>"
 APP_NAME="<%= @application %>"
-PID_PATH="/tmp/unicorn.pid"
+PID_PATH="<%= @deploy[:deploy_to] %>/shared/pids/unicorn.pid"
 
 def run_and_print_command(command)
   puts command
