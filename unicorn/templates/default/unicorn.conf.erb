@@ -5,15 +5,12 @@ working_directory app_root
 
 user "<%= @deploy[:user]%>"
 
-#working_directory "<%= @deploy[:deploy_to]%>/current"
-
 listen "<%= @deploy[:deploy_to]%>/shared/sockets/unicorn.sock", :backlog => <%= node[:unicorn][:backlog] %>, :tcp_nodelay => <%= node[:unicorn][:tcp_nodelay] %>, :tcp_nopush => <%= node[:unicorn][:tcp_nopush] %>, :tries => <%= node[:unicorn][:tries] %>, :delay => <%= node[:unicorn][:delay] %>, :accept_filter => <%= node[:unicorn][:accept_filter].inspect %>
 
 timeout <%= node[:unicorn][:timeout] %>
 
 
-pid app_root + '/shared/pids/unicorn.pid'
-#pid "<%= @deploy[:deploy_to]%>/shared/pids/unicorn.pid"
+pid '/tmp/unicorn.pid'
 stderr_path "<%= @deploy[:deploy_to]%>/shared/log/unicorn.stderr.log"
 stdout_path "<%= @deploy[:deploy_to]%>/shared/log/unicorn.stdout.log"
 
@@ -26,7 +23,6 @@ GC.copy_on_write_friendly = true if GC.respond_to?(:copy_on_write_friendly=)
 # more info: https://willj.net/2011/08/02/fixing-the-gemfile-not-found-bundlergemfilenotfound-error/
 before_exec do |server|
   ENV["BUNDLE_GEMFILE"] = "#{app_root}/Gemfile"
-  #ENV['BUNDLE_GEMFILE'] = "<%= @deploy[:deploy_to]%>/current/Gemfile"
 end
 
 before_fork do |server, worker|
@@ -38,8 +34,7 @@ before_fork do |server, worker|
 
   # Before forking, kill the master process that belongs to the .oldbin PID.
   # This enables 0 downtime deploys.
-  #old_pid = "<%= @deploy[:deploy_to]%>/shared/pids/unicorn.pid.oldbin"
-  old_pid = app_root + '/shared/pids/unicorn.pid.oldbin'
+  old_pid = '/tmp/unicorn.pid.oldbin'
   if File.exists?(old_pid) && server.pid != old_pid
     begin
       Process.kill("QUIT", File.read(old_pid).to_i)
