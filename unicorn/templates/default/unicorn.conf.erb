@@ -25,22 +25,20 @@ before_exec do |server|
 end
 
 before_fork do |server, worker|
-  # the following is highly recomended for Rails + "preload_app true"
-  # as there's no need for the master process to hold a connection
   if defined?(ActiveRecord::Base)
     ActiveRecord::Base.connection.disconnect!
   end
-
-  # Before forking, kill the master process that belongs to the .oldbin PID.
-  # This enables 0 downtime deploys.
   old_pid = "/mnt/srv/www/places/shared/pids/unicorn.pid.oldbin"
-  if File.exists?(old_pid) && server.pid != old_pid
+  if old_pid != server.pid
     begin
-      Process.kill("QUIT", File.read(old_pid).to_i)
+      sig = (worker.nr + 1) >= server.worker_processes ? :QUIT : :TTOU
+      Process.kill(sig, File.read(old_pid).to_i)
     rescue Errno::ENOENT, Errno::ESRCH
-      # someone else did our job for us
     end
   end
+
+  # Throttle the master from forking too quickly by sleeping.
+  sleep 1
 end
 
 after_fork do |server, worker|
