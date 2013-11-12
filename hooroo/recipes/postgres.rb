@@ -7,8 +7,6 @@
 # app servers to talk to the db servers even though the postgres recipe
 # manages the pg_hba.conf but doesn't allow it to be enhanced :(
 #
-include_recipe "postgres"
-
 cookbook_file "#{node['postgresql']['dir']}/pg_hba.conf" do
   owner 'postgres'
   group 'postgres'
