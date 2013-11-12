@@ -6,4 +6,5 @@ description       ""
 long_description  ""
 version           "1.12.0"
 
-depends "postgresql"
+depends "apt::default"
+depends "postgresql::default"
