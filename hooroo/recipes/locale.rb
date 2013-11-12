@@ -1,3 +1,8 @@
+# Cookbook Name:: hooroo
+# Recipe:: locale
+#
+# Copyright 2013, Hooroo
+
 bash "Generate locales" do
   user "root"
   cwd "/tmp"

@@ -18,7 +18,5 @@
 include_recipe "postgresql::server"
 
 node['postgresql']['contrib']['packages'].each do |pg_pack|
-
   package pg_pack
-
 end

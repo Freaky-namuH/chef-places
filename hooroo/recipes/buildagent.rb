@@ -1,6 +1,5 @@
-#
 # Cookbook Name:: hooroo
-# Recipe:: buildagent 
+# Recipe:: buildagent
 #
 # Copyright 2013, Hooroo
 
@@ -22,6 +21,7 @@ directory "/opt/bin" do
 	recursive true
 	mode 00755
 end
+
 #apt get install libgconf-dev
 #need to fix symlink existing stopping unzip
 bash "unzip chromedriver" do
@@ -29,7 +29,7 @@ bash "unzip chromedriver" do
 	cwd "/tmp"
 	not_if "test -L /opt/bin/chromedriver"
 	code <<-EOH
-	unzip chromedriver.zip -d /opt/bin/	
+	unzip chromedriver.zip -d /opt/bin/
 	EOH
 end
 
@@ -42,6 +42,6 @@ bash "sudojenkins" do
 	cwd "/tmp"
 	ignore_failure true
 	code <<-EOH
-		gpasswd -a jenkins admin	
+		gpasswd -a jenkins admin
 	EOH
 end
