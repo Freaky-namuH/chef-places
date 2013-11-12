@@ -3,7 +3,11 @@
 #
 # Copyright 2013, Hooroo
 
-file '/etc/postgresql/9.2/main/pg_hba.conf' do
+# This isn't great, it overwrites the pg_hba.conf with one that allows the
+# app servers to talk to the db servers even though the postgres recipe
+# manages the pg_hba.conf but doesn't allow it to be enhanced :(
+#
+cookbook_file "#{node['postgresql']['dir']}/pg_hba.conf" do
   owner 'postgres'
   group 'postgres'
   mode '600'
