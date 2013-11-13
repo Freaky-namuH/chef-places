@@ -7,17 +7,17 @@
 # app servers to talk to the db servers even though the postgres recipe
 # manages the pg_hba.conf but doesn't allow it to be enhanced :(
 #
-include_recipe 'apt::default'
-include_recipe 'postgresql::default'
+# include_recipe 'apt::default'
+# include_recipe 'postgresql::default'
 
-override['postgresql']['pg_hba'] = [
-  { :type => 'local', :db => 'all', :user => 'postgres', :addr => nil, :method => 'ident' },
-  { :type => 'local', :db => 'all', :user => 'all', :addr => nil, :method => 'ident' },
-  { :type => 'host', :db => 'all', :user => 'all', :addr => '127.0.0.1/32', :method => 'md5' },
-  { :type => 'host', :db => 'all', :user => 'all', :addr => '10.0.0.1/16', :method => 'md5' },
-  { :type => 'host', :db => 'all', :user => 'all', :addr => '::1/128', :method => 'md5' },
-  { :type => 'host', :db => 'all', :user => 'all', :addr => '10.0.0.0/8', :method => 'md5' }
-]
+# override['postgresql']['pg_hba'] = [
+#   { :type => 'local', :db => 'all', :user => 'postgres', :addr => nil, :method => 'ident' },
+#   { :type => 'local', :db => 'all', :user => 'all', :addr => nil, :method => 'ident' },
+#   { :type => 'host', :db => 'all', :user => 'all', :addr => '127.0.0.1/32', :method => 'md5' },
+#   { :type => 'host', :db => 'all', :user => 'all', :addr => '10.0.0.1/16', :method => 'md5' },
+#   { :type => 'host', :db => 'all', :user => 'all', :addr => '::1/128', :method => 'md5' },
+#   { :type => 'host', :db => 'all', :user => 'all', :addr => '10.0.0.0/8', :method => 'md5' }
+# ]
 
 # cookbook_file "#{node['postgresql']['dir']}/pg_hba.conf" do
 #   owner 'postgres'
