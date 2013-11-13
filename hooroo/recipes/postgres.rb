@@ -18,6 +18,10 @@ node.override['postgresql']['pg_hba'] = [
   { :type => 'host', :db => 'all', :user => 'all', :addr => '10.0.0.0/8', :method => 'md5' }
 ]
 
+node.override['postgresql']['config']['wal_level'] = 'hot_standby'
+node.override['postgresql']['config']['max_wal_senders'] = 5
+node.override['postgresql']['config']['wal_keep_segments'] = 32
+
 node[:deploy].each do |application, x|
 
   database_details = node[:deploy][application].fetch(:database, false)
