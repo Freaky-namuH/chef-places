@@ -8,7 +8,7 @@ listen "<%= @deploy[:deploy_to]%>/shared/sockets/unicorn.sock", :backlog => <%= 
 
 timeout <%= node[:unicorn][:timeout] %>
 
-pid "/mnt/srv/www/places/shared/pids/unicorn.pid"
+pid "/mnt/srv/www/<%= @application %>/shared/pids/unicorn.pid"
 
 stderr_path "<%= @deploy[:deploy_to]%>/shared/log/unicorn.stderr.log"
 stdout_path "<%= @deploy[:deploy_to]%>/shared/log/unicorn.stdout.log"
@@ -28,7 +28,7 @@ before_fork do |server, worker|
   if defined?(ActiveRecord::Base)
     ActiveRecord::Base.connection.disconnect!
   end
-  old_pid = "/mnt/srv/www/places/shared/pids/unicorn.pid.oldbin"
+  old_pid = "/mnt/srv/www/<%= @application %>/shared/pids/unicorn.pid.oldbin"
   if old_pid != server.pid
     begin
       sig = (worker.nr + 1) >= server.worker_processes ? :QUIT : :TTOU
