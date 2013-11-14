@@ -16,7 +16,7 @@ directory "/var/lib/postgresql/#{node['postgresql']['version']}/archives" do
   action :create
 end
 
-template "#{default['postgresql']['dir']}/recovery.conf" do
+template "#{node['postgresql']['dir']}/recovery.conf" do
   source "recovery.conf.erb"
   owner "root"
   group "root"
