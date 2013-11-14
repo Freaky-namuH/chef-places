@@ -21,9 +21,9 @@ template "#{default['postgresql']['dir']}/recovery.conf" do
   owner "root"
   group "root"
   mode 00644
-  variables (
+  variables ({
     :restore_command => "cp /var/lib/postgresql/#{node['postgresql']['version']}/archives/%f %p"
-  )
+  })
 end
 
 node.override['postgresql']['pg_hba'] = [
