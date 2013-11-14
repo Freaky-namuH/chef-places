@@ -9,18 +9,49 @@
 #
 include_recipe 'postgresql::server'
 
+directory "/var/lib/postgresql/#{node['postgresql']['version']}/archives" do
+  owner "postgres"
+  group "postgres"
+  mode 00700
+  action :create
+end
+
 node.override['postgresql']['pg_hba'] = [
   { :type => 'local', :db => 'all', :user => 'postgres', :addr => nil, :method => 'ident' },
   { :type => 'local', :db => 'all', :user => 'all', :addr => nil, :method => 'ident' },
   { :type => 'host', :db => 'all', :user => 'all', :addr => '127.0.0.1/32', :method => 'md5' },
   { :type => 'host', :db => 'all', :user => 'all', :addr => '10.0.0.1/16', :method => 'md5' },
   { :type => 'host', :db => 'all', :user => 'all', :addr => '::1/128', :method => 'md5' },
-  { :type => 'host', :db => 'all', :user => 'all', :addr => '10.0.0.0/8', :method => 'md5' }
+  { :type => 'host', :db => 'all', :user => 'all', :addr => '10.0.0.0/8', :method => 'md5' },
+  { :type => 'local', :db => 'replication', :user => 'postgres', :addr => nil, :method => 'trust' }
+  { :type => 'host', :db => 'replication', :user => 'replicator', :addr => 'dbserver1', :method => 'trust' }
+  { :type => 'host', :db => 'replication', :user => 'replicator', :addr => 'dbserver2', :method => 'trust' }
 ]
 
 node.override['postgresql']['config']['wal_level'] = 'hot_standby'
 node.override['postgresql']['config']['max_wal_senders'] = 5
 node.override['postgresql']['config']['wal_keep_segments'] = 32
+node.override['postgresql']['config']['archive_mode'] = 'on'
+node.override['postgresql']['config']['archive_command'] = "cp %p /var/lib/postgresql/#{node['postgresql']['version']}/archives/%f"
+
+database_details = node[:hooroo].fetch(:postgres, false)
+
+node[:hooroo][:postgres][:users].each do |user|
+
+  db_username = user[:username]
+  db_password = user[:password]
+  db_options = user[:options]
+
+  bash "Create PostgreSQL #{db_username} role" do
+    user "postgres"
+    cwd "/tmp"
+    code <<-EOH
+      psql postgres -c "CREATE ROLE #{db_username} WITH PASSWORD '#{db_password}' #{db_options}"
+    EOH
+
+    only_if %Q{ test `psql postgres -t --no-align -c "SELECT 1 FROM pg_roles WHERE rolname='#{db_username}'"`x != "1x" }, :user => 'postgres'
+  end
+end
 
 node[:deploy].each do |application, x|
 
@@ -32,7 +63,7 @@ node[:deploy].each do |application, x|
     db_username = database_details[:username]
     db_password = database_details[:password]
 
-    bash "Setup PostgreSQL roles" do
+    bash "Create PostgreSQL #{db_username} role" do
       user "postgres"
       cwd "/tmp"
       code <<-EOH
