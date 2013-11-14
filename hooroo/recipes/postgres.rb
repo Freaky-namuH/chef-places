@@ -9,7 +9,7 @@
 #
 include_recipe 'postgresql::server'
 
-directory "/var/lib/postgresql/#{node['postgresql']['version']}/archives" do
+directory "/var/lib/postgresql/#{node['postgresql']['version']}/main/archives" do
   owner "postgres"
   group "postgres"
   mode 00700
@@ -22,7 +22,7 @@ template "#{node['postgresql']['dir']}/recovery.conf" do
   group "root"
   mode 00644
   variables ({
-    :restore_command => "cp /var/lib/postgresql/#{node['postgresql']['version']}/archives/%f %p"
+    :restore_command => "cp /var/lib/postgresql/#{node['postgresql']['version']}/main/archives/%f %p"
   })
 end
 
@@ -38,6 +38,7 @@ node.override['postgresql']['pg_hba'] = [
   { :type => 'host', :db => 'replication', :user => 'replicator', :addr => 'dbserver2', :method => 'trust' }
 ]
 
+node.override['postgresql']['config']['hot_standby'] = 'on'
 node.override['postgresql']['config']['wal_level'] = 'hot_standby'
 node.override['postgresql']['config']['max_wal_senders'] = 5
 node.override['postgresql']['config']['wal_keep_segments'] = 32
