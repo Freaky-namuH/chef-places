@@ -23,8 +23,8 @@ node.override['postgresql']['pg_hba'] = [
   { :type => 'host', :db => 'all', :user => 'all', :addr => '10.0.0.1/16', :method => 'md5' },
   { :type => 'host', :db => 'all', :user => 'all', :addr => '::1/128', :method => 'md5' },
   { :type => 'host', :db => 'all', :user => 'all', :addr => '10.0.0.0/8', :method => 'md5' },
-  { :type => 'local', :db => 'replication', :user => 'postgres', :addr => nil, :method => 'trust' }
-  { :type => 'host', :db => 'replication', :user => 'replicator', :addr => 'dbserver1', :method => 'trust' }
+  { :type => 'local', :db => 'replication', :user => 'postgres', :addr => nil, :method => 'trust' },
+  { :type => 'host', :db => 'replication', :user => 'replicator', :addr => 'dbserver1', :method => 'trust' },
   { :type => 'host', :db => 'replication', :user => 'replicator', :addr => 'dbserver2', :method => 'trust' }
 ]
 
