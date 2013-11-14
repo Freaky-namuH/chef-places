@@ -16,6 +16,16 @@ directory "/var/lib/postgresql/#{node['postgresql']['version']}/archives" do
   action :create
 end
 
+template "#{default['postgresql']['dir']}/recovery.conf" do
+  source "recovery.conf.erb"
+  owner "root"
+  group "root"
+  mode 00644
+  variables {
+    :restore_command => "cp /var/lib/postgresql/#{node['postgresql']['version']}/archives/%f %p"
+  }
+end
+
 node.override['postgresql']['pg_hba'] = [
   { :type => 'local', :db => 'all', :user => 'postgres', :addr => nil, :method => 'ident' },
   { :type => 'local', :db => 'all', :user => 'all', :addr => nil, :method => 'ident' },
