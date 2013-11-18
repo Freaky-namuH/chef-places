@@ -3,10 +3,6 @@
 #
 # Copyright 2013, Hooroo
 
-# This isn't great, it overwrites the pg_hba.conf with one that allows the
-# app servers to talk to the db servers even though the postgres recipe
-# manages the pg_hba.conf but doesn't allow it to be enhanced :(
-#
 include_recipe 'postgresql::server'
 
 directory "/var/lib/postgresql/#{node['postgresql']['version']}/main/archives" do
