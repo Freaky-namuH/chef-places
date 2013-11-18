@@ -8,3 +8,4 @@ version           "1.12.0"
 
 depends "apt"
 depends "postgresql"
+depends "nginx"
