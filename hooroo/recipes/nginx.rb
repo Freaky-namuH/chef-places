@@ -3,6 +3,8 @@
 #
 # Copyright 2013, Hooroo
 
+include_recipe 'nginx::commons_conf'
+
 node.override['nginx']['event'] = 'epoll'
 node.override['nginx']['worker_connections'] = 10240
 node.overrid3['nginx']['keepalive_timeout'] = 30
