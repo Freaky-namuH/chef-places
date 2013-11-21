@@ -3,8 +3,6 @@
 # Cookbook Name:: splunk
 # Recipe:: default
 #
-#require_recipe "splunk::rrd"
-
 service "splunk" do
   supports :restart => true, :stop => true, :start => true
   action :nothing
@@ -13,7 +11,7 @@ end
 bash "pre install / upgrade splunk" do
   user "root"
   code "true"
-  not_if do File.exists?("/opt/splunkforwarder-#{node[:splunk][:version]}") end
+  not_if do File.exists?("/opt/splunkforwarder-#{node['splunk']['version']}") end
   notifies :stop, resources(:service => "splunk"), :immediately
 end
 
@@ -21,16 +19,16 @@ bash "install / upgrade splunk" do
   user "root"
   code <<-EOH
     cd /tmp
-    wget -c -O #{node[:splunk][:remote_file]} '#{node[:splunk][:remote_url]}'
-    mkdir /opt/splunkforwarder-#{node[:splunk][:version]}
-    tar xzvf #{node[:splunk][:remote_file]} -C /opt/splunkforwarder-#{node[:splunk][:version]} --strip-components 1
+    wget -c -O #{node['splunk']['remote_file']} '#{node["splunk"]["remote_url"]}'
+    mkdir /opt/splunkforwarder-#{node['splunk']['version']}
+    tar xzvf #{node['splunk']['remote_file']} -C /opt/splunkforwarder-#{node['splunk']['version']} --strip-components 1
 
-    ln -nfs /opt/splunkforwarder-#{node[:splunk][:version]} /opt/splunkforwarder
+    ln -nfs /opt/splunkforwarder-#{node['splunk']['version']} /opt/splunkforwarder
 
     /opt/splunkforwarder/bin/splunk enable boot-start --accept-license || true
     /opt/splunkforwarder/bin/splunk start --accept-license || true
   EOH
-  not_if do File.exists?("/opt/splunkforwarder-#{node[:splunk][:version]}") end
+  not_if do File.exists?("/opt/splunkforwarder-#{node['splunk']['version']}") end
 end
 
 package 'python-pyrrd' do
@@ -39,8 +37,8 @@ end
 
 directory "/opt/splunkforwarder/etc/apps/search/bin" do
   action :create
-  owner node[:owner_name]
-  group node[:owner_name]
+  owner 'root'
+  group 'root'
   mode 0755
 end
 
@@ -55,8 +53,8 @@ end
 
 directory "/opt/splunkforwarder/etc/apps/search/local" do
   action :create
-  owner node[:owner_name]
-  group node[:owner_name]
+  owner 'root'
+  group 'root'
   mode 0755
 end
 
