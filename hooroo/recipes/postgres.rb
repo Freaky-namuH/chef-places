@@ -22,17 +22,25 @@ template "#{node['postgresql']['dir']}/recovery.conf" do
   })
 end
 
-node.override['postgresql']['pg_hba'] = [
+postgres_pg_hba = [
   { :type => 'local', :db => 'all', :user => 'postgres', :addr => nil, :method => 'ident' },
   { :type => 'local', :db => 'all', :user => 'all', :addr => nil, :method => 'ident' },
   { :type => 'host', :db => 'all', :user => 'all', :addr => '127.0.0.1/32', :method => 'md5' },
   { :type => 'host', :db => 'all', :user => 'all', :addr => '10.0.0.1/16', :method => 'md5' },
   { :type => 'host', :db => 'all', :user => 'all', :addr => '::1/128', :method => 'md5' },
   { :type => 'host', :db => 'all', :user => 'all', :addr => '10.0.0.0/8', :method => 'md5' },
-  { :type => 'local', :db => 'replication', :user => 'postgres', :addr => nil, :method => 'trust' },
-  { :type => 'host', :db => 'replication', :user => 'replicator', :addr => 'dbserver1', :method => 'trust' },
-  { :type => 'host', :db => 'replication', :user => 'replicator', :addr => 'dbserver2', :method => 'trust' }
+  { :type => 'local', :db => 'replication', :user => 'postgres', :addr => nil, :method => 'trust' }
 ]
+
+node[:opsworks][:layers].each do |layer_name, layer_config|
+  layer_config[:instances].each do |instance_name, instance_config|
+    if instance_name.match(/dbserver/)
+      postgres_pg_hba << { :type => 'host', :db => 'replication', :user => 'replicator', :addr => instance_name, :method => 'trust' }
+    end
+  end
+end
+
+node.override['postgresql']['pg_hba'] = postgres_pg_hba
 
 node.override['postgresql']['config']['hot_standby'] = 'on'
 node.override['postgresql']['config']['wal_level'] = 'hot_standby'
