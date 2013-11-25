@@ -3,6 +3,8 @@
 #
 # Copyright 2013, Hooroo
 
+include_recipe 'deploy'
+
 directory "#{deploy[:deploy_to]}" do
   group deploy[:group]
   owner deploy[:user]
