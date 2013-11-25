@@ -5,9 +5,9 @@
 
 include_recipe 'deploy'
 
-directory "#{deploy[:deploy_to]}" do
-  group deploy[:group]
-  owner deploy[:user]
+directory "#{node[:deploy][:deploy_to]}" do
+  group node[:deploy][:group]
+  owner node[:deploy][:user]
   mode "0775"
   action :create
   recursive true
