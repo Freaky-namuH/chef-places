@@ -13,6 +13,7 @@ ff02::3 ip6-allhosts
 
 # OpsWorks Layer State
 127.0.0.1 <%= node[:opsworks][:instance][:hostname] %>.localdomain <%= node[:opsworks][:instance][:hostname] %>
+
 <% seen = [] -%>
 <% node[:opsworks][:layers].each do |layer_name, layer_config| -%>
 <% layer_config[:instances].each do |instance_name, instance_config| -%>
@@ -26,7 +27,7 @@ ff02::3 ip6-allhosts
 <% end -%>
 <% end -%>
 
-<%- if node[:hooroo] && node[:hooroo][:postgres] && node[:hooroo][:postgres][:database_master] %>
-# Database setup
-<%= Resolv.getaddress(node[:hooroo][:postgres][:database_master]) %> database-master
+<%- if node[:hooroo] && node[:hooroo][:postgres] && node[:hooroo][:postgres][:database_master_ip_address] %>
+# Database master
+<%= node[:hooroo][:postgres][:database_master_ip_address] %> database-master
 <%- end %>
