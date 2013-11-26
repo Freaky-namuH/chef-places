@@ -18,7 +18,7 @@ ff02::3 ip6-allhosts
 <% node[:opsworks][:layers].each do |layer_name, layer_config| -%>
 <% layer_config[:instances].each do |instance_name, instance_config| -%>
 <% if !seen.include?(instance_name) && instance_config[:private_ip] -%>
-<%= Resolv.getaddress(instance_config[:private_ip]) %> <%= instance_name %><%= (node[:hooroo] && node[:hooroo][:postgres] && node[:hooroo][:postgres][:database_master] && node[:hooroo][:postgres][:database_master] == instance_name) ? 'database-master' : 'test' %>
+<%= Resolv.getaddress(instance_config[:private_ip]) %> <%= instance_name %> <%= (node[:hooroo] && node[:hooroo][:postgres] && node[:hooroo][:postgres][:database_master] && node[:hooroo][:postgres][:database_master] == instance_name) ? 'database-master' : 'test' %>
 <% if instance_config[:ip] %>
 <%= Resolv.getaddress(instance_config[:ip]) %> <%= instance_name %>-ext
 <% end %>
