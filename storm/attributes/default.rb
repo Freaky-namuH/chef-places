@@ -53,7 +53,7 @@ default['storm']['nimbus']['reassign']                             = true
 default['storm']['nimbus']['file_copy_expiration_secs']            = 600
 
 # ui attributes
-default['storm']['ui']['port']                                     = 8080
+default['storm']['ui']['port']                                     = 8081
 default['storm']['ui']['childopts']                                = '-Xmx768m'
 
 # drpc attributes
