@@ -60,7 +60,7 @@ if node['java']['install_flavor'] == 'ibm'
 end
 
 # if you change this to true, you can download directly from Oracle
-default['java']['oracle']['accept_oracle_download_terms'] = false
+default['java']['oracle']['accept_oracle_download_terms'] = true
 
 # direct download paths for oracle, you have been warned!
 
