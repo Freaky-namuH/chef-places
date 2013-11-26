@@ -17,13 +17,13 @@
 # limitations under the License.
 #
 
-include_recipe "java::default"
+include_recipe 'java::default'
 
 node.override['build_essential']['compiletime'] = true
-include_recipe "build-essential"
+include_recipe 'build-essential'
 
-chef_gem "zookeeper"
-chef_gem "json"
+chef_gem 'zookeeper'
+chef_gem 'json'
 
 
 group node[:zookeeper][:group] do
@@ -37,8 +37,8 @@ end
 zk_basename = "zookeeper-#{node[:zookeeper][:version]}"
 
 remote_file ::File.join(Chef::Config[:file_cache_path], "#{zk_basename}.tar.gz") do
-  owner "root"
-  mode "0644"
+  owner 'root'
+  mode '0644'
   source node[:zookeeper][:mirror]
   checksum node[:zookeeper][:checksum]
   action :create
@@ -46,7 +46,7 @@ end
 
 directory node[:zookeeper][:install_dir] do
   owner node[:zookeeper][:user]
-  mode "0755"
+  mode '0755'
 end
 
 unless ::File.exists?(::File.join(node[:zookeeper][:install_dir], zk_basename))

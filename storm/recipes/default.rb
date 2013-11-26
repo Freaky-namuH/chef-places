@@ -2,121 +2,81 @@
 # Cookbook Name:: storm
 # Recipe:: default
 #
-# Copyright 2012, Webtrends, Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Copyright (C) 2013 Fewbytes
+# 
 
-include_recipe "java"
-include_recipe "runit"
+package 'zip'
+include_recipe 'java'
+include_recipe 'zeromq'
+include_recipe 'maven'
 
+group node['storm']['group']
 
-install_dir = "#{node['storm']['root_dir']}/storm-#{node['storm']['version']}"
-
-node.set['storm']['lib_dir'] = "#{install_dir}/lib"
-node.set['storm']['conf_dir'] = "#{install_dir}/conf"
-node.set['storm']['bin_dir'] = "#{install_dir}/bin"
-node.set['storm']['install_dir'] = install_dir
-
-# install dependency packages
-%w{unzip python zeromq jzmq}.each do |pkg|
-  package pkg do
-    action :install
-  end
+user node['storm']['user'] do
+  gid node['storm']['group']
 end
 
-#locate the nimbus for this storm cluster
-nimbus_host = node
-
-# search for zookeeper servers
-zookeeper_quorum = [node[:fqdn]]
-
-# setup storm group
-group "storm"
-
-# setup storm user
-user "storm" do
-  comment "Storm user"
-  gid "storm"
-  shell "/bin/bash"
-  home "/home/storm"
-  supports :manage_home => true
+ark 'storm' do
+  version node['storm']['version']
+  url node['storm']['download_url']
+  checksum node['storm']['checksum']
+  home_dir node['storm']['home_dir']
+  action :install
 end
 
-# storm looks for storm.yaml in ~/.storm/storm.yaml so make a link
-link "/home/storm/.storm" do
-  to node['storm']['conf_dir']
-end 
+execute 'delete log and conf dirs' do
+  command 'rm -rf logs conf'
+  cwd node['storm']['home_dir']
+  not_if { %w(logs conf).inject(true) { |a, dir| a and
+      ::File.symlink?(::File.join(node['storm']['home_dir'], dir)) } }
+end
 
-# setup directories
-%w{conf_dir local_dir log_dir install_dir bin_dir}.each do |name|
-  directory node['storm'][name] do
-    owner "storm"
-    group "storm"
+maven 'jzmq' do
+  group_id 'org.zeromq'
+  artifact_id 'jzmq'
+  version '2.2.0'
+  dest ::File.join(node['storm']['home_dir'], 'lib')
+end
+
+[node['storm']['local_dir'], node['storm']['log_dir']].each do |dir|
+  directory dir do
+    owner node['storm']['user']
+    group node['storm']['group']
+    mode 00755
     action :create
-    recursive true
   end
 end
 
-# download storm
-remote_file "#{Chef::Config[:file_cache_path]}/storm-#{node[:storm][:version]}.tar.gz" do
-  source "#{node['storm']['download_url']}/storm-#{node['storm']['version']}.tar.gz"
-  owner  "storm"
-  group  "storm"
-  mode   00744
-  action :create_if_missing
+directory node['storm']['conf_dir'] do
+  mode 00755
+  action :create
 end
 
-# uncompress the application tarball into the install directory
-execute "tar" do
-  user    "storm"
-  group   "storm"
-  creates node['storm']['lib_dir']
-  cwd     node['storm']['root_dir']
-  command "tar zxvf #{Chef::Config[:file_cache_path]}/storm-#{node['storm']['version']}.tar.gz"
+link ::File.join(node['storm']['home_dir'], 'conf') do
+  to node['storm']['conf_dir']
 end
 
-# create a link from the specific version to a generic current folder
-link "#{node['storm']['root_dir']}/current" do
-	to node['storm']['install_dir']
+link ::File.join(node['storm']['home_dir'], 'logs') do
+  to node['storm']['log_dir']
 end
 
-# storm.yaml
-template "#{node['storm']['conf_dir']}/storm.yaml" do
-  source "storm.yaml.erb"
+if Chef::Config[:solo]
+  Chef::Log.warn 'Chef solo does not support search, assuming Zookeeper and Nimbus are on this node'
+  nimbus   = node
+  zk_nodes = [node]
+else
+  nimbus   = if node.recipe? 'storm::nimbus'
+               node
+             else
+               nimbus_nodes = search(:node, "recipes:storm\\:\\:nimbus AND storm_cluster_name:#{node['storm']['cluster_name']} AND chef_environment:#{node.chef_environment}")
+               raise RuntimeError, 'Nimbus node not found' if nimbus_nodes.empty?
+               nimbus_nodes.sort { |a, b| a.name <=> b.name }.first
+             end
+  zk_nodes = search(:node, "zookeeper_cluster_name:#{node['storm']['zookeeper']['cluster_name']} AND chef_environment:#{node.chef_environment}").sort { |a, b| a.name <=> b.name }
+  raise RuntimeError, 'No zookeeper nodes nodes found' if zk_nodes.empty?
+end
+
+template ::File.join(node['storm']['conf_dir'], 'storm.yaml') do
   mode 00644
-  variables(
-    :nimbus => nimbus_host,
-    :zookeeper_quorum => zookeeper_quorum
-  )
-end
-
-# sets up storm users profile
-template "/home/storm/.profile" do
-  owner  "storm"
-  group  "storm"
-  source "profile.erb"
-  mode   00644
-  variables(
-    :storm_dir => node['storm']['install_dir']
-  )
-end
-
-template "#{node['storm']['install_dir']}/bin/killstorm" do
-  source  "killstorm.erb"
-  owner "root"
-  group "root"
-  mode  00755
-  variables({
-    :log_dir => node['storm']['log_dir']
-  })
+  variables :zookeeper_nodes => zk_nodes, :nimbus => nimbus
 end

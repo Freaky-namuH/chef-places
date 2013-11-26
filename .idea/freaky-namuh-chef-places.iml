@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RUBY_MODULE" version="4">
+  <component name="CompassSettings">
+    <option name="compassExecutableFilePath" value="$USER_HOME$/.rbenv/versions/1.9.3-p327-falcon/lib/ruby/gems/1.9.1/gems/compass-0.12.2/bin/compass" />
+    <option name="compassSupportEnabled" value="true" />
+  </component>
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.3.5, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="coderay (v1.0.9, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="diff-lcs (v1.2.4, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="ffi (v1.9.0, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="formatador (v0.2.4, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="guard (v1.8.1, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="guard-rspec (v2.1.0, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="hike (v1.2.3, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="listen (v1.2.2, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="lumberjack (v1.0.4, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="method_source (v0.8.2, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="minitest (v4.7.5, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="multi_json (v1.8.2, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="net-scp (v1.0.4, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="net-ssh (v2.6.8, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="pg (v0.16.0, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="pry (v0.9.12.2, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rack (v1.5.2, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rake (v10.1.0, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rb-fsevent (v0.9.3, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rb-inotify (v0.9.0, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rb-kqueue (v0.2.0, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rspec (v2.13.0, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rspec-core (v2.13.1, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rspec-expectations (v2.13.0, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rspec-mocks (v2.13.1, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rubyzip (v0.9.9, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="slop (v3.4.6, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="sprockets (v2.10.0, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="thor (v0.18.1, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="tilt (v1.4.1, rbenv: 1.9.3-p327-falcon) [gem]" level="application" />
+  </component>
+</module>
+

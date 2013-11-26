@@ -22,10 +22,10 @@ include_recipe "zookeeper::zookeeper"
 exhibitor_build_path = ::File.join(Chef::Config[:file_cache_path], 'exhibitor')
 
 [node[:exhibitor][:install_dir],
-  node[:exhibitor][:snapshot_dir],
-  node[:exhibitor][:transaction_dir],
-  node[:exhibitor][:log_index_dir],
-  exhibitor_build_path
+ node[:exhibitor][:snapshot_dir],
+ node[:exhibitor][:transaction_dir],
+ node[:exhibitor][:log_index_dir],
+ exhibitor_build_path
 ].uniq.each do |dir|
   directory dir do
     owner node[:zookeeper][:user]
@@ -35,7 +35,7 @@ end
 
 template ::File.join(exhibitor_build_path, 'build.gradle') do
   variables(
-    :version => node[:exhibitor][:version] )
+      :version => node[:exhibitor][:version])
   action :create
 end
 
@@ -62,8 +62,8 @@ template check_script do
   owner node[:zookeeper][:user]
   mode "0744"
   variables(
-    :exhibitor_port => node[:exhibitor][:opts][:port],
-    :localhost => node[:exhibitor][:opts][:hostname] )
+      :exhibitor_port => node[:exhibitor][:opts][:port],
+      :localhost      => node[:exhibitor][:opts][:hostname])
 end
 
 template "/etc/init/exhibitor.conf" do
@@ -74,20 +74,20 @@ template "/etc/init/exhibitor.conf" do
   notifies :stop, "service[exhibitor]" # :restart doesn't reload upstart conf
   notifies :start, "service[exhibitor]"
   variables(
-    :user => node[:zookeeper][:user],
-    :jar => exhibitor_jar,
-    :opts => node[:exhibitor][:opts],
-    :check_script => check_script )
+      :user         => node[:zookeeper][:user],
+      :jar          => exhibitor_jar,
+      :opts         => node[:exhibitor][:opts],
+      :check_script => check_script)
 end
 
 template node[:exhibitor][:opts][:defaultconfig] do
   owner node[:zookeeper][:user]
   mode "0644"
   variables(
-    :snapshot_dir => node[:exhibitor][:snapshot_dir],
-    :transaction_dir => node[:exhibitor][:transaction_dir],
-    :log_index_dir => node[:exhibitor][:log_index_dir],
-    :defaultconfig => node[:exhibitor][:defaultconfig] )
+      :snapshot_dir    => node[:exhibitor][:snapshot_dir],
+      :transaction_dir => node[:exhibitor][:transaction_dir],
+      :log_index_dir   => node[:exhibitor][:log_index_dir],
+      :defaultconfig   => node[:exhibitor][:defaultconfig])
 end
 
 service "exhibitor" do
