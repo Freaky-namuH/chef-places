@@ -1,16 +1,30 @@
-#!upstart
-description "Exhibitor Server"
+# Ubuntu upstart file at /etc/init/exhibitor
 
-env USER=<%= @user %>
+description "Exhibitor Zookeeper Supervisor"
 
-start on startup
-stop on shutdown
+limit nofile 32768 32768
+
+start on runlevel [2345]
+stop on [!12345]
 
 respawn
+respawn limit 2 5
 
-exec sudo -u $USER java -jar <%= @jar %> \
-    <%= @opts.keys.sort.map { |k| "--#{k.to_s} #{@opts[k]}" }.join(" ") %>
+umask 007
+
+kill timeout 300
+
+setuid <%= @user %>
+setgid <%= @user %>
+
+console log
+
+script
+    if [ "x$ENABLE" = "xyes" ]; then
+        exec java -jar <%= @jar %> <%= @opts.keys.sort.map { |k| "--#{k.to_s} #{@opts[k]}" }.join(" ") %>
+    fi
+end script
 
 post-start script
-  <%= @check_script %> || { stop ; exit 1; }
+    <%= @check_script %> || { stop ; exit 1; }
 end script
